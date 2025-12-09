@@ -1,80 +1,48 @@
+// This is a React component for managing and displaying a single goal
+// The Goals.tsx component will render all the goals in the store 
 import type { JSX } from "react"
 import { useState } from "react"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch } from "../../app/hooks"
 import styles from "./Goal.module.css"
-import {
-  decrement,
-  increment,
-  incrementAsync,
-  incrementByAmount,
-  incrementIfOdd,
-  selectCount,
-  selectStatus,
-} from "./goalSlice"
+import type { Goal as GoalType } from "./goalSlice"
+import { addGoal } from "./goalSlice"
 
-export const Goal = (): JSX.Element => {
+interface Props {
+  goal?: GoalType
+}
+
+// Component that either renders a single `goal` (presentational),
+// or shows a small form to add a new goal if no `goal` prop is provided.
+export const Goal = ({ goal }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
-  const count = useAppSelector(selectCount)
-  const status = useAppSelector(selectStatus)
-  const [incrementAmount, setIncrementAmount] = useState("2")
+  const [text, setText] = useState("")
 
-  const incrementValue = Number(incrementAmount) || 0
+  const onAdd = () => {
+    const goalText = text.trim()
+    if (!goalText) return
+    const id = Date.now().toString()
+    dispatch(addGoal({ id, goalText }))
+    setText("")
+  }
+
+  if (goal) {
+    return (
+      <div className={styles.goalItem}>
+        <h3>{goal.goalText}</h3>
+      </div>
+    )
+  }
 
   return (
-    <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <label aria-label="Count" className={styles.value}>
-          {count}
-        </label>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          type="number"
-          onChange={e => {
-            setIncrementAmount(e.target.value)
-          }}
-        />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          disabled={status !== "idle"}
-          onClick={() => {
-            void dispatch(incrementAsync(incrementValue))
-          }}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => {
-            dispatch(incrementIfOdd(incrementValue))
-          }}
-        >
-          Add If Odd
-        </button>
-      </div>
+    <div className={styles.goalContainer}>
+      <h1>What is your goal today?</h1>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Enter a short goal"
+        aria-label="New goal"
+      />
+      <button onClick={onAdd}>Add Goal</button>
     </div>
   )
 }

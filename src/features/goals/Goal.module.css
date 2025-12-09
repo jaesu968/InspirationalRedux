@@ -79,3 +79,19 @@
   opacity: 1;
   transition: 0s;
 }
+
+/* Container used for the add-goal form */
+.goalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Presentational single goal item */
+.goalItem {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}

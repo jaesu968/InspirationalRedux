@@ -1,5 +1,5 @@
 import "./App.css"
-import { Goal } from "./features/goals/Goal"
+import { Goals } from "./components/Goals"
 import { Quotes } from "./features/quotes/Quotes"
 import logo from "./logo.svg"
 import { JSX } from "react"
@@ -18,8 +18,8 @@ export const App = () => (
         This is a React-Redux application that provides inspiration through
         quotes and helps you track your goals.
       </p>
+      <Goals /> 
       <Quotes />
-      <Goal />
     </header>
     <footer className="footer">Copyright 2025 &copy; Made by Kyle Jaesu Akuya
       <p>All rights reserved.</p>
