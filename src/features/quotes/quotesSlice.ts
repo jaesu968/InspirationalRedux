@@ -1,81 +1,25 @@
 // src/features/quotes/quotesSlice.ts
-// all Redux and API logic for quotes here
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import quotesData from "./quotes.json"; // import local JSON
 
-export interface QuoteState {
-  quote: string
-  author: string
-}
-
-const initialState: QuoteState = {
-  quote: "",
-  author: "",
-}
-
-interface QuotePayload {
-  quoteText: string
-  quoteAuthor: string
-}
-
-// Redux slice for storing the current quote
-export const currentQuoteSlice = createSlice({
-  name: "currentQuote",
-  initialState,
-  reducers: {
-    setQuote: (state, action: PayloadAction<QuotePayload>) => {
-      state.quote = action.payload.quoteText
-      state.author = action.payload.quoteAuthor
-    },
-    clearQuote: (state) => {
-      state.quote = ""
-      state.author = ""
-    },
-  },
-})
-
-export const { setQuote, clearQuote } = currentQuoteSlice.actions
-export default currentQuoteSlice.reducer
-
-// --- RTK Query API slice for fetching quotes ---
 export type QuotableQuote = {
-  _id: string
-  content: string
-  author: string
-  authorSlug: string
-  length: number
-  tags: string[]
-}
-
-export type RandomQuoteParams = {
-  limit?: number
-  maxLength?: number
-  minLength?: number
-  tags?: string
-  author?: string
-}
+  content: string;
+  author: string;
+};
 
 export const quotesApi = createApi({
   reducerPath: "quotesApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://api.quotable.io" }),
-  tagTypes: ["Quotes"],
+  baseQuery: fetchBaseQuery({ baseUrl: "/" }), // baseUrl is local
   endpoints: (build) => ({
-    getRandomQuotes: build.query<QuotableQuote[], RandomQuoteParams>({
-      query: (params = {}) => {
-        const searchParams = new URLSearchParams()
-        if (params.limit) searchParams.append("limit", params.limit.toString())
-        if (params.maxLength) searchParams.append("maxLength", params.maxLength.toString())
-        if (params.minLength) searchParams.append("minLength", params.minLength.toString())
-        if (params.tags) searchParams.append("tags", params.tags)
-        if (params.author) searchParams.append("author", params.author)
-        return `/quotes/random?${searchParams.toString()}`
-      },
-      providesTags: ["Quotes"],
+    getRandomQuotes: build.query<QuotableQuote[], { limit?: number }>({
+      queryFn: async ({ limit = 1 } = {}) => {
+        if (!quotesData || quotesData.length === 0) return { data: [] };
+        const randomIndex = Math.floor(Math.random() * quotesData.length);
+        const selectedQuote = quotesData[randomIndex];
+        return { data: [selectedQuote] };
+      }
     }),
   }),
-})
+});
 
-export const {
-  useGetRandomQuotesQuery,
-  useLazyGetRandomQuotesQuery,
-} = quotesApi
+export const { useGetRandomQuotesQuery, useLazyGetRandomQuotesQuery } = quotesApi;

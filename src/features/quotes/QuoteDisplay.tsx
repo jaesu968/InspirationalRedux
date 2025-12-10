@@ -1,22 +1,20 @@
-// src/features/quotes/QuoteDisplay.tsx
-import type { JSX } from "react"
-import { useAppSelector } from "../../app/hooks"
-import styles from "./Quotes.module.css"
+import { useGetRandomQuotesQuery } from "./quotesSlice";
 
-export const QuoteDisplay = (): JSX.Element | null => {
-  const quote = useAppSelector((s) => s.currentQuote.quote)
-  const author = useAppSelector((s) => s.currentQuote.author)
+export const QuoteDisplay = () => {
+  const { data: quotes, isLoading, isError } = useGetRandomQuotesQuery({ limit: 1 });
 
-  if (!quote) return null
+  if (isLoading) return <p>Loading inspirational quote...</p>;
+  if (isError) return <p style={{ color: "red" }}>Failed to load quote.</p>;
+  if (!quotes || quotes.length === 0) return null;
+
+  const quote = quotes[0];
 
   return (
-    <div className={styles.container}>
-      <blockquote>
-        &ldquo;{quote}&rdquo;
-        <footer>
-          <cite>{author}</cite>
-        </footer>
+    <figure style={{ margin: "20px", maxWidth: "600px", textAlign: "center" }}>
+      <blockquote style={{ fontSize: "1.2em", fontStyle: "italic" }}>
+        "{quote.content}"
       </blockquote>
-    </div>
-  )
-}
+      {quote.author && <figcaption style={{ textAlign: "right" }}>— {quote.author}</figcaption>}
+    </figure>
+  );
+};

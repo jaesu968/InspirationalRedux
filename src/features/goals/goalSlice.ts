@@ -1,58 +1,50 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../app/createAppSlice"
+// src/features/goals/goalSlice.ts
+import { createSlice, createSelector, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 
-// Single goal type
 export interface Goal {
-  id: string
-  goalText: string
-  completed?: boolean
+  id: string;
+  goalText: string;
+  completed: boolean;
 }
 
-// We'll keep the slice root as `state.goals.goals` to minimize changes elsewhere.
-type GoalsState = {
-  goals: {
-    byId: Record<string, Goal>
-    allIds: string[]
-  }
+interface GoalsState {
+  goalsArray: Goal[];
 }
 
 const initialState: GoalsState = {
-  goals: {
-    byId: {},
-    allIds: [],
-  },
-}
+  goalsArray: [],
+};
 
-export const goalSlice = createAppSlice({
+export const goalsSlice = createSlice({
   name: "goals",
   initialState,
   reducers: {
-    addGoal: (state, action: PayloadAction<Goal>) => {
-      const g = action.payload
-      state.goals.byId[g.id] = g
-      if (!state.goals.allIds.includes(g.id)) state.goals.allIds.push(g.id)
+    addGoal: (state, action: PayloadAction<{ id: string; goalText: string }>) => {
+      state.goalsArray.push({ ...action.payload, completed: false });
     },
     removeGoal: (state, action: PayloadAction<{ id: string }>) => {
-      const id = action.payload.id
-      delete state.goals.byId[id]
-      state.goals.allIds = state.goals.allIds.filter(i => i !== id)
+      state.goalsArray = state.goalsArray.filter((g) => g.id !== action.payload.id);
     },
-    updateGoal: (state, action: PayloadAction<Goal>) => {
-      const g = action.payload
-      if (state.goals.byId[g.id]) state.goals.byId[g.id].goalText = g.goalText
+    updateGoal: (state, action: PayloadAction<{ id: string; goalText: string }>) => {
+      const goal = state.goalsArray.find((g) => g.id === action.payload.id);
+      if (goal) goal.goalText = action.payload.goalText;
     },
     completeGoal: (state, action: PayloadAction<{ id: string }>) => {
-      const id = action.payload.id
-      if (state.goals.byId[id]) {
-        state.goals.byId[id].completed = true
-      }
-    }
+      const goal = state.goalsArray.find((g) => g.id === action.payload.id);
+      if (goal) goal.completed = true;
+    },
   },
-})
+});
 
-// Selector that returns an array of goals in insertion order
-export const selectGoals = (state: { goals: GoalsState }) =>
-  state.goals.goals.allIds.map(id => state.goals.goals.byId[id])
-// export actions and reducer for use in other files
-export const { addGoal, removeGoal, updateGoal, completeGoal } = goalSlice.actions
-export const goalsReducer = goalSlice.reducer
+export const { addGoal, removeGoal, updateGoal, completeGoal } = goalsSlice.actions;
+
+// --- Properly memoized selector ---
+export const selectGoals = createSelector(
+  (state: RootState) => state.goals.goalsArray,
+  (goalsArray) => goalsArray.filter(goal => !goal.completed) // example transformation
+);
+
+
+export const goalsReducer = goalsSlice.reducer;
+

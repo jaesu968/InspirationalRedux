@@ -3,15 +3,13 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 
 // Local reducers
 import { goalsReducer } from "../features/goals/goalSlice";
-import currentQuoteReducer from "../features/quotes/quotesSlice";
 
 // RTK Query API
-import { quotesApi } from "../features/quotes/quotesSlice"; // <-- fix name
+import { quotesApi } from "../features/quotes/quotesSlice";
 
 export const store = configureStore({
   reducer: {
     goals: goalsReducer,
-    currentQuote: currentQuoteReducer,
     [quotesApi.reducerPath]: quotesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
