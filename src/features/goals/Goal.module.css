@@ -21,21 +21,6 @@
   font-family: "Courier New", Courier, monospace;
 }
 
-.button {
-  appearance: none;
-  background: none;
-  font-size: 32px;
-  padding-left: 12px;
-  padding-right: 12px;
-  outline: none;
-  border: 2px solid transparent;
-  color: rgb(112, 76, 182);
-  padding-bottom: 4px;
-  cursor: pointer;
-  background-color: rgba(112, 76, 182, 0.1);
-  border-radius: 2px;
-  transition: all 0.15s;
-}
 
 .textbox {
   font-size: 32px;
@@ -86,12 +71,139 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  background: rgba(255, 255, 255, 0.50);
+  border-radius: 12px; 
+  padding: 96px 80px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  width: 100%; 
 }
+/* style for the h1 inside goalContainer */
+.goalContainer h1 {
+  margin: 0 0 16px 0; /* add margin below the heading */
+  font-size: 1.5rem; /* increase font size */
+  color: #333; /* dark text color for better readability */
+}
+/* Style the input inside goalContainer */
+.goalContainer input {
+  width: 100%; /* full width */
+  padding: 14px 16px; 
+  font-size: 1rem; 
+  border: 2px solid #ddd; 
+  border-radius: 8px; 
+  box-sizing: border-box; /* ensure padding doesn't affect total width */
+}
+/* add a :focus state for the input */ 
+.goalContainer input:focus {
+  outline: none; /* remove default focus ring */
+  border-color: #007bff; /* change border color on focus */
+}
+
 
 /* Presentational single goal item */
 .goalItem {
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  position: relative; 
+  padding: 12px 16px;
+  border-radius: 8px; 
+  box-sizing: border-box; 
+  width: 100%; 
+}
+
+.completedGoal {
+  text-decoration: line-through;
+  color: #999;
+  font-style: italic;
+}
+
+/* Remove button styles */ 
+/* Remove button base */ 
+.removeBtn {
+  position: absolute; 
+  top: 8px; 
+  right: 8px; 
+  height: 28px;
+  min-width: 28px; 
+  padding: 0 8px; 
+  border-radius: 999px; 
+  border: none; 
+  background: #e55353; 
+  color: #fff; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 6px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  font-size: 0.9rem; 
+  line-height: 1; 
+  transition: width 160ms ease, background 120ms ease; 
+  overflow: hidden; 
+  white-space: nowrap;  
+}
+/* make the button visually circular when collapsed */ 
+.removeBtn {
+  width: 28px; 
+  padding-left: 0; 
+  padding-right: 0; 
+}
+/* Hover/focus: expand, swap icon-> label */ 
+.removeBtn:hover, 
+.removeBtn:focus {
+  background: #c84646; 
+  width: auto; 
+  padding: 0 10px; 
+  transform: translateY(-1px); 
+  outline: none; 
+}
+
+/* Focus ring for keyboard users */ 
+.removeBtn:focus {
+  box-shadow: 0 0 0 3px rgba(200, 80, 80, 0.18); 
+}
+
+/* Complete button styles */
+.completeBtn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  height: 28px;
+  width: 28px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: #4caf50;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 120ms ease, transform 120ms ease;
+  outline: none;
+}
+
+.completeBtn:hover,
+.completeBtn:focus {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.completeBtn:focus {
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.18);
+}
+
+/* editing state */ 
+.editInput {
+  width: 100%; 
+  padding: 8px 10px; 
+  font-size: 1rem; 
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  box-sizing: 6px; 
+  background: transparent; 
+}
+.editInput:focus {
+  outline: none; 
+  border-color: #007bff; 
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.12); 
 }

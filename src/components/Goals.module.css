@@ -1,0 +1,45 @@
+:root{
+  --goal-gap: 12px;
+}
+
+.goalsWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+}
+
+.goalsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.50);
+  border-radius: 12px;
+  padding: 96px 80px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.goalsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--goal-gap);
+  width: 100%;
+  max-width: 720px; /* keeps grid from stretching too wide */
+}
+
+/* Force each grid item to have consistent sizing so grid looks neat */
+.goalCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Grid cells will size naturally based on content */
+@media (max-width: 639px) {
+  .goalsGrid {
+    grid-template-columns: repeat(1, minmax(0,1fr));
+  }
+}

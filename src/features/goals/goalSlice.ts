@@ -5,6 +5,7 @@ import { createAppSlice } from "../../app/createAppSlice"
 export interface Goal {
   id: string
   goalText: string
+  completed?: boolean
 }
 
 // We'll keep the slice root as `state.goals.goals` to minimize changes elsewhere.
@@ -39,6 +40,12 @@ export const goalSlice = createAppSlice({
     updateGoal: (state, action: PayloadAction<Goal>) => {
       const g = action.payload
       if (state.goals.byId[g.id]) state.goals.byId[g.id].goalText = g.goalText
+    },
+    completeGoal: (state, action: PayloadAction<{ id: string }>) => {
+      const id = action.payload.id
+      if (state.goals.byId[id]) {
+        state.goals.byId[id].completed = true
+      }
     }
   },
 })
@@ -47,5 +54,5 @@ export const goalSlice = createAppSlice({
 export const selectGoals = (state: { goals: GoalsState }) =>
   state.goals.goals.allIds.map(id => state.goals.goals.byId[id])
 // export actions and reducer for use in other files
-export const { addGoal, removeGoal, updateGoal } = goalSlice.actions
+export const { addGoal, removeGoal, updateGoal, completeGoal } = goalSlice.actions
 export const goalsReducer = goalSlice.reducer
