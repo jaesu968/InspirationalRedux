@@ -1,24 +1,22 @@
+// src/features/quotes/QuoteDisplay.tsx
 import type { JSX } from "react"
 import { useAppSelector } from "../../app/hooks"
 import styles from "./Quotes.module.css"
 
 export const QuoteDisplay = (): JSX.Element | null => {
-  const current = useAppSelector((s) => s.currentQuote?.current)
-  const status = useAppSelector((s) => s.currentQuote?.status)
+  const quote = useAppSelector((s) => s.currentQuote.quote)
+  const author = useAppSelector((s) => s.currentQuote.author)
 
-  if (status === "loading") return <div className={styles.container}><h3>Loading quote…</h3></div>
-  if (!current) return null
+  if (!quote) return null
 
   return (
     <div className={styles.container}>
       <blockquote>
-        &ldquo;{current.quote}&rdquo;
+        &ldquo;{quote}&rdquo;
         <footer>
-          <cite>{current.author}</cite>
+          <cite>{author}</cite>
         </footer>
       </blockquote>
     </div>
   )
 }
-
-export default QuoteDisplay

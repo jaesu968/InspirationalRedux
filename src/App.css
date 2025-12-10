@@ -43,9 +43,10 @@
   color:rgb(143, 209, 176)
 }
 
-.WeatherWidget {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+.WeatherWidget-container {
+  position: absolute;   /* position relative to the nearest positioned parent */
+  top: 20px;            /* distance from top */
+  right: 20px;          /* distance from right */
+  z-index: 100;         /* make sure it appears on top */
+  color: #4b4b4b; /* text color */ 
 }
