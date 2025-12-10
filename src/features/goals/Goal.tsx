@@ -70,7 +70,7 @@ export const Goal = ({ goal }: Props): JSX.Element => {
               aria-label={`Complete goal: ${goal.goalText}`}
               title="Mark as Complete"
               onClick={() => dispatch(completeGoal({ id: goal.id }))}>
-                ✓
+                Complete Goal
               </button>
           )}
           <button 
@@ -79,7 +79,7 @@ export const Goal = ({ goal }: Props): JSX.Element => {
             aria-label={`Remove goal: ${goal.goalText}`}
             title="Remove Goal"
             onClick={() => { dispatch(removeGoal({ id: goal.id })); dispatch(fetchRandomQuote()); }}>
-              X
+              Remove Goal
             </button>            {isEditing ? (
               <input 
                 ref={inputRef} 
