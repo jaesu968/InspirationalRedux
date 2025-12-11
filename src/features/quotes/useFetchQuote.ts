@@ -7,7 +7,7 @@ export function useFetchQuote() {
 
   const fetchQuote = useCallback(async () => {
     try {
-      const result = await triggerQuoteFetch({ limit: 1 }).unwrap();
+      const result = await triggerQuoteFetch().unwrap();
       return result[0]; // return the single quote
     } catch (err) {
       console.error("Failed to fetch quote", err);

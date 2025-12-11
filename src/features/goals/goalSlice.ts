@@ -42,7 +42,7 @@ export const { addGoal, removeGoal, updateGoal, completeGoal } = goalsSlice.acti
 // --- Properly memoized selector ---
 export const selectGoals = createSelector(
   (state: RootState) => state.goals.goalsArray,
-  (goalsArray) => goalsArray.filter(goal => !goal.completed) // example transformation
+  (goalsArray: Goal[]) => goalsArray.filter(goal => !goal.completed) // example transformation
 );
 
 

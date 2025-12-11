@@ -11,8 +11,8 @@ export const quotesApi = createApi({
   reducerPath: "quotesApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }), // baseUrl is local
   endpoints: (build) => ({
-    getRandomQuotes: build.query<QuotableQuote[], { limit?: number }>({
-      queryFn: async ({ limit = 1 } = {}) => {
+    getRandomQuotes: build.query<QuotableQuote[], void>({
+      queryFn: async () => {
         if (!quotesData || quotesData.length === 0) return { data: [] };
         const randomIndex = Math.floor(Math.random() * quotesData.length);
         const selectedQuote = quotesData[randomIndex];

@@ -1,7 +1,7 @@
 import { useGetRandomQuotesQuery } from "./quotesSlice";
 
 export const QuoteDisplay = () => {
-  const { data: quotes, isLoading, isError } = useGetRandomQuotesQuery({ limit: 1 });
+  const { data: quotes, isLoading, isError } = useGetRandomQuotesQuery();
 
   if (isLoading) return <p>Loading inspirational quote...</p>;
   if (isError) return <p style={{ color: "red" }}>Failed to load quote.</p>;
