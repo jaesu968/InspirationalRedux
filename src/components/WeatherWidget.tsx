@@ -63,7 +63,11 @@ export const WeatherWidget: React.FC = () => {
         <button onClick={fetchWeather}>Show Local Weather</button>
       )}
       {loading && <p>Loading weather...</p>}
-      {error && <p>Error: {error}</p>}
+      {error && (
+        <button onClick={() => window.open('https://www.weather.com', '_blank', 'noopener,noreferrer')}>
+          Get Weather
+        </button>
+      )}
       {weather && (
         <>
           <h4>Weather</h4>
