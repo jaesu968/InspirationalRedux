@@ -1,57 +1,331 @@
-# vite-template-redux
+# Inspirational Homepage App
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+A beginner-friendly **React + Redux** application that combines daily goal tracking with inspirational content. Think of it as a **productivity dashboard** that tracks your goals while keeping you motivated with weather updates, random quotes, and beautiful images.
 
-```sh
-npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+---
+
+## Table of Contents
+
+- [Features](#features)  
+- [Key Concepts for Redux Learners](#key-concepts-for-redux-learners)  
+- [Technologies Used](#technologies-used)  
+- [Getting Started](#getting-started)  
+- [Available Scripts](#available-scripts)  
+- [Project Structure](#project-structure)  
+- [Understanding the Code](#understanding-the-code)  
+- [Contributing & Forking](#contributing--forking)  
+- [Future Improvements](#future-improvements)  
+
+---
+
+## Features
+
+- 🌤 **Current Weather**: Shows your local weather (requests location permission)
+- 🖼 **Dynamic Background Images**: Beautiful, inspiring images that change based on your progress
+- 💬 **Random Inspirational Quotes**: Fresh quotes displayed each time you visit
+- ✅ **Goals Tracker**: Add, edit, delete, and mark goals as complete
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+---
+
+## Key Concepts for Redux Learners
+
+This project is designed to teach fundamental Redux patterns. Here are the core concepts you'll encounter:
+
+### **1. Redux Store** (`src/app/store.ts`)
+The **store** is the single source of truth for your entire app's state. Think of it like a database in memory that React components can access.
+
+```typescript
+const store = configureStore({
+  reducer: {
+    goals: goalsReducer,
+    [quotesApi.reducerPath]: quotesApi.reducer,
+  },
+});
 ```
 
-## Goals
+### **2. Slices** (e.g., `src/features/goals/goalSlice.ts`)
+A **slice** is a bundle of Redux logic (state + actions). It combines:
+- **State**: What data you're storing
+- **Reducers**: Functions that update that state
+- **Actions**: Events that trigger reducers
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+```typescript
+export const goalsSlice = createSlice({
+  name: "goals",
+  initialState,
+  reducers: {
+    addGoal: (state, action) => { /* update state */ },
+    removeGoal: (state, action) => { /* update state */ },
+  },
+});
+```
 
-## Scripts
+### **3. Reducers**
+Reducers are **pure functions** that take the current state and an action, then return a new state. With Redux Toolkit, you can mutate state directly (it uses Immer under the hood).
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+### **4. Actions & Dispatching**
+Actions are objects that describe what happened. You **dispatch** actions to trigger reducers:
 
-## Inspiration
+```typescript
+dispatch(addGoal({ id: "1", goalText: "Learn Redux" }));
+```
 
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+### **5. Selectors** (Memoization)
+**Selectors** are functions that extract data from the store. The `createSelector` function optimizes performance by memoizing results:
 
-## Inspirational Homepage Project - Codecademy Project
-For this project, you will build an inspirational homepage. This application will interact with different APIs to display the current weather, a background image, and an inspirational quote. It will also provide users with a space to write down their goals for the day. You can think of this app as a fancy to-do list with dynamic data.
-## Project Requirements
-* Build the application using React and Redux
-* Version control your application with Git and host the repository on GitHub
-* Write a README (using Markdown) that documents your project including:
- * The purpose of your project
- * Technologies used
- * Features
- * Future work
-* Your application is deployed via Netlify and accessible by users
-## Features
-* Users can check the current weather
-* Users are shown an inspirational image
-* Users can cycle through multiple fetched images
-* Users are shown an inspirational quote
-* Users can write down their goals
-* Users can delete goals
-* Users can mark goals as complete
-## Programming Languages, Technologies, Frameworks & Libraries Used
-* HTML
-* CSS
-* JavaScript, including requests to APIs (Or TypeScript)
-* React
-* Redux
-* Git and GitHub
-* Deployment with Netlify
+```typescript
+export const selectGoals = createSelector(
+  (state: RootState) => state.goals.goalsArray,
+  (goalsArray) => goalsArray.filter(goal => !goal.completed)
+);
+```
 
+### **6. Hooks**
+Redux provides hooks to connect components to the store:
+- `useAppSelector()`: Read state from the store
+- `useAppDispatch()`: Dispatch actions
 
+```typescript
+const goals = useAppSelector(selectGoals);
+const dispatch = useAppDispatch();
+dispatch(addGoal({ id: "1", goalText: "Stay hydrated" }));
+```
+
+### **7. RTK Query** (Bonus: Advanced Topic)
+The quotes feature uses **RTK Query**, a data-fetching library built on Redux Toolkit. It handles loading, caching, and refetching API data automatically.
+
+---
+
+## Technologies Used
+
+| Technology | Purpose |
+|------------|---------|
+| **React 19** | Build interactive user interfaces |
+| **Redux Toolkit** | State management (createSlice, configureStore) |
+| **React-Redux** | Connect React components to Redux (hooks) |
+| **TypeScript** | Type safety and better developer experience |
+| **Vite** | Fast build tool and development server |
+| **CSS Modules** | Scoped, maintainable styling |
+| **RTK Query** | Data fetching and caching |
+| **Vitest** | Fast unit testing framework |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have **Node.js 18+** and **npm** installed:
+
+```sh
+node --version  # Should be v18 or higher
+npm --version
+```
+
+### Installation
+
+```sh
+# Clone or navigate to the project
+cd InspirationalRedux
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Open your browser to `http://localhost:5173` (or the URL shown in your terminal).
+
+---
+
+## Available Scripts
+
+Run these commands in the project directory:
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run type-check` | Check for TypeScript errors |
+| `npm run lint` | Find code style issues |
+| `npm run lint:fix` | Fix code style issues automatically |
+| `npm run format` | Format code with Prettier |
+| `npm test` | Run unit tests |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── store.ts              # Redux store configuration (combines all slices)
+│   ├── hooks.ts              # Custom hooks (useAppDispatch, useAppSelector)
+│   └── createAppSlice.ts     # Redux Toolkit utilities
+│
+├── features/
+│   ├── goals/
+│   │   ├── goalSlice.ts      # Goals slice (state + reducers + actions)
+│   │   └── Goal.tsx          # Individual goal component
+│   │
+│   ├── quotes/
+│   │   ├── quotesSlice.ts    # RTK Query setup for quotes API
+│   │   ├── QuoteDisplay.tsx  # Quote display component
+│   │   └── quotes.json       # Local quotes data
+│   │
+│   └── weatherWidget/
+│       └── weatherWidgetAPI.ts # Weather API integration
+│
+├── components/
+│   ├── Goals.tsx             # Goals container component
+│   └── WeatherWidget.tsx     # Weather display component
+│
+├── images/                   # Static images and API integration
+├── utils/                    # Helper functions and test utilities
+├── App.tsx                   # Root component
+├── App.css                   # Global styles
+├── index.css                 # Reset and base styles
+└── main.tsx                  # React entry point
+```
+
+---
+
+## Understanding the Code
+
+### How Goals Work (Redux in Action)
+
+**1. Read from Store** (`Goals.tsx`):
+```typescript
+const goals = useAppSelector(selectGoals);
+```
+
+**2. Dispatch Action** (`Goal.tsx`):
+```typescript
+const dispatch = useAppDispatch();
+dispatch(completeGoal({ id: goal.id }));
+```
+
+**3. Reducer Updates State** (`goalSlice.ts`):
+```typescript
+completeGoal: (state, action) => {
+  const goal = state.goalsArray.find((g) => g.id === action.payload.id);
+  if (goal) goal.completed = true;
+}
+```
+
+**4. Component Re-renders** (automatically when selected state changes):
+React detects the state change and re-renders the component.
+
+### Redux Data Flow
+
+```
+User Action → Dispatch Action → Reducer Updates State → Selector Memoizes → Component Re-renders
+```
+
+### Why Use Selectors?
+
+Selectors prevent unnecessary re-renders. The component only updates when the **selected data** actually changes:
+
+```typescript
+// Without selector: component re-renders when ANY state changes
+const goals = useAppSelector(state => state.goals.goalsArray);
+
+// With selector: component only re-renders when goalsArray changes
+const goals = useAppSelector(selectGoals);
+```
+
+---
+
+## Contributing & Forking
+
+### Fork the Repository
+
+A **fork** is your own copy of the project that you can modify freely. Here's how to fork:
+
+**1. Go to the GitHub repository** (make sure you're logged into GitHub)
+
+**2. Click the "Fork" button** in the top-right corner
+
+**3. Select where to fork it** (your personal account or organization)
+
+**4. GitHub creates a copy** under `github.com/YOUR-USERNAME/ReactReduxPortfolioProject`
+
+### Clone Your Fork Locally
+
+After forking, clone it to your computer:
+
+```sh
+# Replace YOUR-USERNAME with your GitHub username
+git clone https://github.com/YOUR-USERNAME/ReactReduxPortfolioProject.git
+cd ReactReduxPortfolioProject/InspirationalRedux
+
+# Install dependencies
+npm install
+
+# Start developing
+npm run dev
+```
+
+### Stay Synced with the Original (Optional)
+
+To pull updates from the original project:
+
+```sh
+# Add the original repository as "upstream"
+git remote add upstream https://github.com/ORIGINAL-OWNER/ReactReduxPortfolioProject.git
+
+# Fetch updates from the original
+git fetch upstream
+
+# Merge updates into your local branch
+git merge upstream/main
+```
+
+### Making Changes & Creating Pull Requests
+
+**1. Create a new branch** for your changes:
+```sh
+git checkout -b feature/my-awesome-feature
+```
+
+**2. Make your changes** and commit:
+```sh
+git add .
+git commit -m "Add my awesome feature"
+```
+
+**3. Push to your fork**:
+```sh
+git push origin feature/my-awesome-feature
+```
+
+**4. Go to GitHub** and click "Create Pull Request"
+
+**5. Describe your changes** and submit for review
+
+### Code Guidelines
+
+Before submitting a PR, make sure to:
+
+```sh
+npm run type-check  # Check for TypeScript errors
+npm run lint        # Check code style
+npm run lint:fix    # Fix linting issues
+npm run format      # Format code with Prettier
+npm test            # Run tests
+```
+
+---
+
+## Possible Future Improvements
+
+- **Local Storage Persistence**: Save goals to browser storage
+- **Dark Mode**: Toggle between light and dark themes
+- **Goal Categories**: Organize goals by type (health, work, personal)
+- **Statistics Dashboard**: Track goal completion rates
+- **Cloud Sync**: Save goals to a backend database
+- **Notifications**: Remind users about their goals
+- **Unit Tests**: Expand test coverage for all slices and components
